@@ -100,3 +100,15 @@ my_table2 = my_DB.search('countries')
 my_table3 = my_table1.join(my_table2, 'country')
 my_table3_filtered = my_table3.filter(lambda x: x['EU'] == 'no').filter(lambda x: float(x['temperature']) < 5.0)
 print(my_table3_filtered.table)
+
+my_table3_filtered = my_table3.filter(lambda x: x['EU'] == 'yes').filter(lambda x: x['coastline'] == 'no')
+print(my_table3_filtered.aggregate(lambda x: min(x), 'temperature'),
+      my_table3_filtered.aggregate(lambda x: max(x), 'temperature'))
+
+print(my_table3_filtered.aggregate(lambda x: min(x), 'latitude'),
+      my_table3_filtered.aggregate(lambda x: max(x), 'latitude'))
+for country in my_table2.table:
+    new = my_table3.filter(lambda x: x['country'] == country['country'])
+    if new.table:
+        print(country['country'], new.aggregate(lambda x: min(x), 'latitude'), my_table3_filtered.aggregate(lambda x: max(x), 'latitude'))
+
